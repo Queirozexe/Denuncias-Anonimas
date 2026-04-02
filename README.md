@@ -118,34 +118,6 @@ Este sistema é uma **simulação acadêmica**, ideal para:
 
 ---
 
-## 🌐 Publicação no GitHub Pages
-
-### Passo a passo:
-
-1. Crie um repositório no GitHub
-2. Envie o arquivo `index.html`
-3. Vá em:
-
-```
-Settings → Pages
-```
-
-4. Configure:
-
-* Branch: `main`
-* Pasta: `/root`
-
-5. Salve
-
----
-
-## 🔗 Entrega
-
-* 📦 Link do repositório GitHub
-* 🌍 Link do site publicado
-
----
-
 ## ⚠️ Observações finais
 
 * Este projeto **não deve ser usado em produção**
