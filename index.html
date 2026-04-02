@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Denúncia Segura | Sistema de denúncias anônimas</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: rgba(15, 23, 42, 0.86);
+      --panel-2: rgba(30, 41, 59, 0.86);
+      --line: rgba(148, 163, 184, 0.18);
+      --text: #e5eefb;
+      --muted: #9fb0c9;
+      --primary: #38bdf8;
+      --primary-2: #0ea5e9;
+      --accent: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 20px 50px rgba(0,0,0,.35);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(14, 165, 233, 0.18), transparent 24%),
+        radial-gradient(circle at left center, rgba(34, 197, 94, 0.14), transparent 20%),
+        linear-gradient(160deg, #020617 0%, #0b1220 55%, #111827 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .container {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+      background: rgba(2, 6, 23, 0.72);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #05111b;
+      font-weight: 900;
+      box-shadow: var(--shadow);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      padding: 10px 14px;
+      border-radius: 999px;
+      transition: .2s ease;
+    }
+
+    .nav-links a:hover { background: rgba(56,189,248,.10); color: var(--text); }
+
+    .hero {
+      padding: 72px 0 36px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-copy {
+      padding: 36px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      color: #bfeaff;
+      font-size: .92rem;
+      margin-bottom: 18px;
+      border: 1px solid rgba(56, 189, 248, 0.18);
+    }
+
+    h1, h2, h3 { margin: 0 0 14px; line-height: 1.08; }
+    h1 { font-size: clamp(2.3rem, 5vw, 4.3rem); }
+    h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); }
+    h3 { font-size: 1.08rem; }
+
+    .lead {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--muted);
+      max-width: 65ch;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 26px;
+    }
+
+    .btn {
+      border: 0;
+      cursor: pointer;
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-weight: 700;
+      transition: transform .18s ease, opacity .18s ease, background .18s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: #03131e;
+    }
+    .btn-secondary {
+      background: rgba(148, 163, 184, 0.12);
+      color: var(--text);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .hero-panel {
+      padding: 28px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .mini-stat {
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.82));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+    }
+
+    .mini-stat strong {
+      display: block;
+      font-size: 1.4rem;
+      margin-bottom: 6px;
+    }
+
+    .section {
+      padding: 36px 0;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .section-header p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 58ch;
+      line-height: 1.7;
+    }
+
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .category-card {
+      padding: 22px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .category-card ul {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .accent-a { border-top: 3px solid #38bdf8; }
+    .accent-b { border-top: 3px solid #a78bfa; }
+    .accent-c { border-top: 3px solid #22c55e; }
+    .accent-d { border-top: 3px solid #f59e0b; }
+
+    .form-wrap {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .form-card, .status-card {
+      padding: 26px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: .96rem;
+      color: #d6e5f8;
+      font-weight: 600;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      background: rgba(2, 6, 23, 0.52);
+      color: var(--text);
+      padding: 14px 14px;
+      border-radius: 14px;
+      outline: none;
+      font: inherit;
+    }
+
+    input::placeholder, textarea::placeholder { color: #6f84a3; }
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(56, 189, 248, 0.55);
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12);
+    }
+
+    textarea { resize: vertical; min-height: 136px; }
+
+    .upload-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .upload-option {
+      border: 1px dashed rgba(148, 163, 184, 0.28);
+      background: rgba(15, 23, 42, 0.48);
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+      color: var(--muted);
+      transition: .2s ease;
+    }
+
+    .upload-option:hover { border-color: rgba(56, 189, 248, 0.42); color: var(--text); }
+
+    .hint {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.6;
+    }
+
+    .protocol-box {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(56,189,248,.13), rgba(34,197,94,.10));
+      border: 1px solid rgba(56,189,248,.20);
+      display: none;
+    }
+
+    .protocol-code {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      margin-top: 6px;
+      color: #c9f3ff;
+    }
+
+    .status-steps {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .status-step {
+      border: 1px solid var(--line);
+      background: rgba(15, 23, 42, 0.66);
+      border-radius: 16px;
+      padding: 14px 16px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: #475569;
+      flex: 0 0 auto;
+    }
+
+    .status-step.active {
+      color: var(--text);
+      border-color: rgba(34, 197, 94, 0.32);
+      background: rgba(34, 197, 94, 0.10);
+    }
+
+    .status-step.active .status-dot { background: var(--accent); }
+
+    .lookup-result {
+      margin-top: 16px;
+      display: none;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--line);
+    }
+
+    .info-grid {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .info-box {
+      padding: 18px;
+      border-radius: 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+    }
+
+    .info-box p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .admin-item {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.84);
+      border: 1px solid var(--line);
+      display: grid;
+      gap: 12px;
+    }
+
+    .admin-top {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .admin-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: .84rem;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      background: rgba(148, 163, 184, 0.10);
+      color: #dbe9fa;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-small {
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: .92rem;
+    }
+
+    .footer {
+      padding: 40px 0 48px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .notice {
+      margin-top: 18px;
+      color: #c9d8ee;
+      background: rgba(245, 158, 11, 0.10);
+      border: 1px solid rgba(245, 158, 11, 0.18);
+      padding: 14px 16px;
+      border-radius: 14px;
+      line-height: 1.65;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid, .form-wrap, .categories-grid {
+        grid-template-columns: 1fr;
+      }
+      .info-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .form-grid, .upload-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-copy, .hero-panel, .form-card, .status-card { padding: 22px; }
+      .section-header { align-items: start; flex-direction: column; }
+      .nav { align-items: start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a href="#inicio" class="brand">
+        <span class="brand-badge">DS</span>
+        <span>Denúncia Segura</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#categorias">Categorias</a>
+        <a href="#denuncia">Fazer denúncia</a>
+        <a href="#acompanhar">Acompanhar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="container hero-grid">
+        <div class="card hero-copy">
+          <div class="eyebrow">Plataforma acadêmica com foco em segurança, organização e responsabilidade</div>
+          <h1>Sistema de denúncias anônimas com visual moderno e navegação clara</h1>
+          <p class="lead">
+            Este site foi desenvolvido para permitir que cidadãos relatem situações de risco, violência,
+            irregularidades e problemas urbanos sem necessidade de identificação, de forma simples,
+            estruturada e com acompanhamento por protocolo.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#denuncia">Registrar denúncia</a>
+            <a class="btn btn-secondary" href="#acompanhar">Consultar status</a>
+          </div>
+          <div class="notice">
+            Importante: este projeto é uma simulação educacional para Github Pages. O envio de evidências,
+            armazenamento e acompanhamento funcionam no navegador com dados locais do usuário.
+          </div>
+        </div>
+
+        <div class="card hero-panel">
+          <div class="mini-stat">
+            <strong>100% anônimo</strong>
+            Nenhum campo exige nome, CPF, e-mail ou qualquer dado pessoal.
+          </div>
+          <div class="mini-stat">
+            <strong>Protocolo automático</strong>
+            Cada denúncia gera um número único para acompanhamento posterior.
+          </div>
+          <div class="mini-stat">
+            <strong>Status de andamento</strong>
+            Consulte etapas como recebida, em análise, encaminhada e concluída.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="categorias">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>Categorias de denúncia</h2>
+            <p>As categorias foram organizadas em blocos para facilitar o registro correto de cada situação.</p>
+          </div>
+        </div>
+
+        <div class="categories-grid">
+          <article class="category-card accent-a">
+            <h3>A) Segurança e Violência</h3>
+            <ul>
+              <li>Violência contra a mulher</li>
+              <li>Violência contra crianças</li>
+              <li>Violência contra idosos</li>
+              <li>Furto/Roubo</li>
+              <li>Drogas</li>
+              <li>Atividade suspeita</li>
+            </ul>
+          </article>
+
+          <article class="category-card accent-b">
+            <h3>B) Direitos e Conduta</h3>
+            <ul>
+              <li>Assédio moral/sexual</li>
+              <li>Bullying/Cyberbullying</li>
+              <li>Discriminação</li>
+              <li>Direitos humanos</li>
+              <li>Denúncia institucional</li>
+            </ul>
+          </article>
+
+          <article class="category-card accent-c">
+            <h3>C) Meio Ambiente e Bem-Estar</h3>
+            <ul>
+              <li>Maus-tratos a animais</li>
+              <li>Crimes ambientais</li>
+              <li>Perturbação do sossego</li>
+              <li>Situações de risco</li>
+            </ul>
+          </article>
+
+          <article class="category-card accent-d">
+            <h3>D) Cidade e Serviços</h3>
+            <ul>
+              <li>Infraestrutura urbana</li>
+              <li>Serviços públicos</li>
+              <li>Transporte e trânsito</li>
+              <li>Irregularidades escolares</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="denuncia">
+      <div class="container form-wrap">
+        <div class="card form-card">
+          <div class="section-header">
+            <div>
+              <h2>Registrar denúncia</h2>
+              <p>Preencha os dados abaixo. O sistema irá gerar um protocolo automático ao final do envio.</p>
+            </div>
+          </div>
+
+          <form id="reportForm" class="form-grid">
+            <div class="field">
+              <label for="categoria">Categoria</label>
+              <select id="categoria" required>
+                <option value="">Selecione</option>
+                <optgroup label="Segurança e Violência">
+                  <option>Violência contra a mulher</option>
+                  <option>Violência contra crianças</option>
+                  <option>Violência contra idosos</option>
+                  <option>Furto/Roubo</option>
+                  <option>Drogas</option>
+                  <option>Atividade suspeita</option>
+                </optgroup>
+                <optgroup label="Direitos e Conduta">
+                  <option>Assédio moral/sexual</option>
+                  <option>Bullying/Cyberbullying</option>
+                  <option>Discriminação</option>
+                  <option>Direitos humanos</option>
+                  <option>Denúncia institucional</option>
+                </optgroup>
+                <optgroup label="Meio Ambiente e Bem-Estar">
+                  <option>Maus-tratos a animais</option>
+                  <option>Crimes ambientais</option>
+                  <option>Perturbação do sossego</option>
+                  <option>Situações de risco</option>
+                </optgroup>
+                <optgroup label="Cidade e Serviços">
+                  <option>Infraestrutura urbana</option>
+                  <option>Serviços públicos</option>
+                  <option>Transporte e trânsito</option>
+                  <option>Irregularidades escolares</option>
+                </optgroup>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="urgencia">Nível de urgência</label>
+              <select id="urgencia" required>
+                <option value="">Selecione</option>
+                <option>Baixa</option>
+                <option>Média</option>
+                <option>Alta</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="bairro">Bairro</label>
+              <input id="bairro" type="text" placeholder="Ex.: Centro" required />
+            </div>
+
+            <div class="field">
+              <label for="rua">Rua</label>
+              <input id="rua" type="text" placeholder="Ex.: Rua das Flores" required />
+            </div>
+
+            <div class="field full">
+              <label for="referencia">Ponto de referência</label>
+              <input id="referencia" type="text" placeholder="Ex.: Próximo à escola / praça / mercado" required />
+            </div>
+
+            <div class="field full">
+              <label for="descricao">Descrição da denúncia</label>
+              <textarea id="descricao" placeholder="Descreva a situação com clareza e responsabilidade..." required></textarea>
+            </div>
+
+            <div class="field full">
+              <label>Upload de evidência (simulado)</label>
+              <div class="upload-grid">
+                <label class="upload-option">
+                  <input type="file" accept="image/*" hidden id="imgFile" />
+                  <strong>Imagem</strong>
+                  <div>PNG, JPG, JPEG</div>
+                </label>
+                <label class="upload-option">
+                  <input type="file" accept="video/*" hidden id="videoFile" />
+                  <strong>Vídeo</strong>
+                  <div>MP4, MOV, AVI</div>
+                </label>
+                <label class="upload-option">
+                  <input type="file" accept=".pdf,.doc,.docx,.txt" hidden id="docFile" />
+                  <strong>Documento</strong>
+                  <div>PDF, DOC, TXT</div>
+                </label>
+              </div>
+              <p class="hint" id="fileSummary">Nenhum arquivo selecionado.</p>
+            </div>
+
+            <div class="field full">
+              <button class="btn btn-primary" type="submit">Enviar denúncia</button>
+            </div>
+          </form>
+
+          <div class="protocol-box" id="protocolBox">
+            <div>Denúncia registrada com sucesso.</div>
+            <div class="protocol-code" id="protocolCode">PROTO-000000</div>
+            <div class="hint">Guarde este número para consultar o andamento da denúncia.</div>
+          </div>
+        </div>
+
+        <aside class="card status-card" id="acompanhar">
+          <h2>Acompanhar status</h2>
+          <p class="lead" style="font-size: 1rem;">
+            Digite o protocolo gerado pelo sistema para verificar a situação atual da denúncia.
+          </p>
+          <div class="field">
+            <label for="protocoloConsulta">Número do protocolo</label>
+            <input id="protocoloConsulta" type="text" placeholder="Ex.: PROTO-240401-1234" />
+          </div>
+          <div class="hero-actions" style="margin-top: 14px;">
+            <button class="btn btn-secondary" id="consultarBtn" type="button">Consultar protocolo</button>
+          </div>
+
+          <div class="lookup-result" id="lookupResult">
+            <h3>Resultado da consulta</h3>
+            <p id="lookupText" class="hint" style="margin-top:6px;"></p>
+            <div class="status-steps" id="statusSteps">
+              <div class="status-step" data-status="recebida"><span class="status-dot"></span><span>Denúncia recebida</span></div>
+              <div class="status-step" data-status="analise"><span class="status-dot"></span><span>Em análise</span></div>
+              <div class="status-step" data-status="encaminhada"><span class="status-dot"></span><span>Encaminhada</span></div>
+              <div class="status-step" data-status="concluida"><span class="status-dot"></span><span>Concluída</span></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container info-grid">
+        <div class="info-box">
+          <h3>Estrutura pensada para Github Pages</h3>
+          <p>Projeto estático em HTML, CSS e JavaScript puro, fácil de publicar em repositórios acadêmicos.</p>
+        </div>
+        <div class="info-box">
+          <h3>Foco em design</h3>
+          <p>Layout responsivo, tipografia forte, blocos bem definidos e hierarquia visual clara para melhor usabilidade.</p>
+        </div>
+        <div class="info-box">
+          <h3>Uso acadêmico</h3>
+          <p>Atende os exercícios solicitados: categorias, localização, upload simulado, protocolo automático e acompanhamento.</p>
+        </div>
+      </div>
+    </section>
+      <section class="section" id="painel-admin">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>Painel administrativo</h2>
+            <p>Área de gerenciamento das denúncias registradas no navegador, com edição, exclusão e atualização de status.</p>
+          </div>
+        </div>
+
+        <div class="form-wrap">
+          <div class="card form-card">
+            <h3>Lista de denúncias recebidas</h3>
+            <p class="hint">Use este painel para fins acadêmicos. Como o projeto está em Github Pages, os dados ficam salvos no navegador via <code>localStorage</code>.</p>
+
+            <div class="field full" style="margin-top: 16px;">
+              <label for="adminFiltro">Filtrar por categoria, bairro ou protocolo</label>
+              <input id="adminFiltro" type="text" placeholder="Digite para filtrar a lista..." />
+            </div>
+
+            <div id="adminList" style="margin-top: 18px; display: grid; gap: 14px;"></div>
+          </div>
+
+          <aside class="card status-card">
+            <h3>Editar denúncia</h3>
+            <p class="hint">Selecione uma denúncia na lista para alterar informações ou atualizar o status.</p>
+
+            <form id="adminEditForm" class="form-grid" style="margin-top: 18px;">
+              <div class="field full">
+                <label for="adminProtocol">Protocolo</label>
+                <input id="adminProtocol" type="text" readonly />
+              </div>
+
+              <div class="field">
+                <label for="adminCategoria">Categoria</label>
+                <select id="adminCategoria">
+                  <option>Violência contra a mulher</option>
+                  <option>Violência contra crianças</option>
+                  <option>Violência contra idosos</option>
+                  <option>Furto/Roubo</option>
+                  <option>Drogas</option>
+                  <option>Atividade suspeita</option>
+                  <option>Assédio moral/sexual</option>
+                  <option>Bullying/Cyberbullying</option>
+                  <option>Discriminação</option>
+                  <option>Direitos humanos</option>
+                  <option>Denúncia institucional</option>
+                  <option>Maus-tratos a animais</option>
+                  <option>Crimes ambientais</option>
+                  <option>Perturbação do sossego</option>
+                  <option>Situações de risco</option>
+                  <option>Infraestrutura urbana</option>
+                  <option>Serviços públicos</option>
+                  <option>Transporte e trânsito</option>
+                  <option>Irregularidades escolares</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="adminStatus">Status</label>
+                <select id="adminStatus">
+                  <option value="recebida">Denúncia recebida</option>
+                  <option value="analise">Em análise</option>
+                  <option value="encaminhada">Encaminhada</option>
+                  <option value="concluida">Concluída</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="adminUrgencia">Urgência</label>
+                <select id="adminUrgencia">
+                  <option>Baixa</option>
+                  <option>Média</option>
+                  <option>Alta</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="adminBairro">Bairro</label>
+                <input id="adminBairro" type="text" />
+              </div>
+
+              <div class="field full">
+                <label for="adminRua">Rua</label>
+                <input id="adminRua" type="text" />
+              </div>
+
+              <div class="field full">
+                <label for="adminReferencia">Ponto de referência</label>
+                <input id="adminReferencia" type="text" />
+              </div>
+
+              <div class="field full">
+                <label for="adminDescricao">Descrição</label>
+                <textarea id="adminDescricao"></textarea>
+              </div>
+
+              <div class="field full" style="display:flex; gap:12px; flex-wrap:wrap;">
+                <button class="btn btn-primary" type="submit">Salvar alterações</button>
+                <button class="btn btn-secondary" type="button" id="adminDeleteBtn">Excluir denúncia</button>
+              </div>
+            </form>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Projeto acadêmico — Sistema de denúncias anônimas | Desenvolvido para publicação no Github e Github Pages.</p>
+    </div>
+  </footer>
+
+  <script>
+    const reportForm = document.getElementById('reportForm');
+    const protocolBox = document.getElementById('protocolBox');
+    const protocolCode = document.getElementById('protocolCode');
+    const fileSummary = document.getElementById('fileSummary');
+    const lookupBtn = document.getElementById('consultarBtn');
+    const protocoloConsulta = document.getElementById('protocoloConsulta');
+    const lookupResult = document.getElementById('lookupResult');
+    const lookupText = document.getElementById('lookupText');
+    const statusSteps = [...document.querySelectorAll('.status-step')];
+
+    const adminList = document.getElementById('adminList');
+    const adminFiltro = document.getElementById('adminFiltro');
+    const adminEditForm = document.getElementById('adminEditForm');
+    const adminDeleteBtn = document.getElementById('adminDeleteBtn');
+    const adminProtocol = document.getElementById('adminProtocol');
+    const adminCategoria = document.getElementById('adminCategoria');
+    const adminStatus = document.getElementById('adminStatus');
+    const adminUrgencia = document.getElementById('adminUrgencia');
+    const adminBairro = document.getElementById('adminBairro');
+    const adminRua = document.getElementById('adminRua');
+    const adminReferencia = document.getElementById('adminReferencia');
+    const adminDescricao = document.getElementById('adminDescricao');
+
+    let selectedProtocol = '';
+
+    const fileInputs = [
+      document.getElementById('imgFile'),
+      document.getElementById('videoFile'),
+      document.getElementById('docFile')
+    ];
+
+    const statusOrder = ['recebida', 'analise', 'encaminhada', 'concluida'];
+
+    function updateFileSummary() {
+      const names = fileInputs
+        .map(input => input.files && input.files[0] ? input.files[0].name : null)
+        .filter(Boolean);
+      fileSummary.textContent = names.length ? `Arquivos selecionados: ${names.join(' | ')}` : 'Nenhum arquivo selecionado.';
+    }
+
+    fileInputs.forEach(input => input.addEventListener('change', updateFileSummary));
+
+    function generateProtocol() {
+      const now = new Date();
+      const yy = String(now.getFullYear()).slice(-2);
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+      const rand = Math.floor(1000 + Math.random() * 9000);
+      return `PROTO-${yy}${mm}${dd}-${rand}`;
+    }
+
+    function loadReports() {
+      return JSON.parse(localStorage.getItem('denunciasAnonimas') || '[]');
+    }
+
+    function saveReports(list) {
+      localStorage.setItem('denunciasAnonimas', JSON.stringify(list));
+    }
+
+    function statusLabel(status) {
+      return {
+        recebida: 'Denúncia recebida',
+        analise: 'Em análise',
+        encaminhada: 'Encaminhada',
+        concluida: 'Concluída'
+      }[status] || status;
+    }
+
+    function formatDate(iso) {
+      return new Date(iso).toLocaleString('pt-BR');
+    }
+
+    function fillAdminForm(report) {
+      selectedProtocol = report.protocol;
+      adminProtocol.value = report.protocol;
+      adminCategoria.value = report.categoria;
+      adminStatus.value = report.status;
+      adminUrgencia.value = report.urgencia;
+      adminBairro.value = report.bairro;
+      adminRua.value = report.rua;
+      adminReferencia.value = report.referencia;
+      adminDescricao.value = report.descricao;
+    }
+
+    function renderAdminList() {
+      const term = (adminFiltro?.value || '').trim().toLowerCase();
+      const reports = loadReports();
+      const filtered = reports.filter(item => {
+        const base = `${item.protocol} ${item.categoria} ${item.bairro} ${item.rua}`.toLowerCase();
+        return base.includes(term);
+      });
+
+      if (!filtered.length) {
+        adminList.innerHTML = '<div class="admin-item"><strong>Nenhuma denúncia encontrada.</strong><span class="hint">Cadastre uma nova denúncia ou altere o filtro informado.</span></div>';
+        return;
+      }
+
+      adminList.innerHTML = filtered.map(item => `
+        <article class="admin-item">
+          <div class="admin-top">
+            <div>
+              <strong>${item.protocol}</strong>
+              <div class="hint">${item.categoria} • ${item.bairro} • ${formatDate(item.createdAt)}</div>
+            </div>
+            <div class="admin-meta">
+              <span class="pill">${statusLabel(item.status)}</span>
+              <span class="pill">Urgência: ${item.urgencia}</span>
+            </div>
+          </div>
+          <div class="hint">${item.descricao}</div>
+          <div class="admin-actions">
+            <button class="btn btn-secondary btn-small" type="button" onclick="selectAdminReport('${item.protocol}')">Editar</button>
+            <button class="btn btn-secondary btn-small" type="button" onclick="advanceStatus('${item.protocol}')">Avançar status</button>
+            <button class="btn btn-secondary btn-small" type="button" onclick="deleteReport('${item.protocol}')">Excluir</button>
+          </div>
+        </article>
+      `).join('');
+
+      if (!selectedProtocol && filtered[0]) {
+        fillAdminForm(filtered[0]);
+      }
+    }
+
+    window.selectAdminReport = function(protocol) {
+      const report = loadReports().find(item => item.protocol === protocol);
+      if (!report) return;
+      fillAdminForm(report);
+      document.getElementById('painel-admin').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    window.advanceStatus = function(protocol) {
+      const reports = loadReports();
+      const index = reports.findIndex(item => item.protocol === protocol);
+      if (index === -1) return;
+      const currentIndex = statusOrder.indexOf(reports[index].status);
+      reports[index].status = statusOrder[Math.min(currentIndex + 1, statusOrder.length - 1)];
+      saveReports(reports);
+      if (selectedProtocol === protocol) fillAdminForm(reports[index]);
+      renderAdminList();
+    }
+
+    window.deleteReport = function(protocol) {
+      const confirmed = confirm(`Deseja realmente excluir a denúncia ${protocol}?`);
+      if (!confirmed) return;
+      const reports = loadReports().filter(item => item.protocol !== protocol);
+      saveReports(reports);
+      if (selectedProtocol === protocol) {
+        selectedProtocol = '';
+        adminEditForm.reset();
+      }
+      renderAdminList();
+    }
+
+    reportForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const protocol = generateProtocol();
+      const report = {
+        protocol,
+        categoria: document.getElementById('categoria').value,
+        urgencia: document.getElementById('urgencia').value,
+        bairro: document.getElementById('bairro').value,
+        rua: document.getElementById('rua').value,
+        referencia: document.getElementById('referencia').value,
+        descricao: document.getElementById('descricao').value,
+        arquivos: fileInputs.map(input => input.files[0]?.name).filter(Boolean),
+        status: 'recebida',
+        createdAt: new Date().toISOString()
+      };
+
+      const reports = loadReports();
+      reports.unshift(report);
+      saveReports(reports);
+
+      protocolCode.textContent = protocol;
+      protocolBox.style.display = 'block';
+      reportForm.reset();
+      updateFileSummary();
+      window.scrollTo({ top: document.getElementById('denuncia').offsetTop - 60, behavior: 'smooth' });
+      renderAdminList();
+    });
+
+    adminFiltro?.addEventListener('input', renderAdminList);
+
+    adminEditForm?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!selectedProtocol) return;
+
+      const reports = loadReports();
+      const index = reports.findIndex(item => item.protocol === selectedProtocol);
+      if (index === -1) return;
+
+      reports[index] = {
+        ...reports[index],
+        categoria: adminCategoria.value,
+        status: adminStatus.value,
+        urgencia: adminUrgencia.value,
+        bairro: adminBairro.value,
+        rua: adminRua.value,
+        referencia: adminReferencia.value,
+        descricao: adminDescricao.value
+      };
+
+      saveReports(reports);
+      renderAdminList();
+    });
+
+    adminDeleteBtn?.addEventListener('click', () => {
+      if (!selectedProtocol) return;
+      window.deleteReport(selectedProtocol);
+    });
+
+    function renderStatus(currentStatus) {
+      const currentIndex = statusOrder.indexOf(currentStatus);
+      statusSteps.forEach((step, index) => {
+        step.classList.toggle('active', index <= currentIndex);
+      });
+    }
+
+    lookupBtn.addEventListener('click', () => {
+      const protocol = protocoloConsulta.value.trim().toUpperCase();
+      const reports = loadReports();
+      const found = reports.find(item => item.protocol.toUpperCase() === protocol);
+
+      lookupResult.style.display = 'block';
+
+      if (!found) {
+        lookupText.textContent = 'Protocolo não encontrado neste navegador. Para testes, utilize um protocolo gerado neste próprio site.';
+        statusSteps.forEach(step => step.classList.remove('active'));
+        return;
+      }
+
+      lookupText.textContent = `Categoria: ${found.categoria} • Bairro: ${found.bairro} • Status atual: ${found.status.replace('analise', 'em análise')}.`;
+      renderStatus(found.status);
+    });
+
+    (function seedDemoData() {
+      const reports = loadReports();
+      if (reports.length) return;
+
+      saveReports([
+        {
+          protocol: 'PROTO-240401-1234',
+          categoria: 'Perturbação do sossego',
+          urgencia: 'Média',
+          bairro: 'Centro',
+          rua: 'Rua Exemplo',
+          referencia: 'Próximo à praça',
+          descricao: 'Ocorrência registrada para demonstração.',
+          arquivos: [],
+          status: 'analise',
+          createdAt: new Date().toISOString()
+        },
+        {
+          protocol: 'PROTO-240401-5678',
+          categoria: 'Infraestrutura urbana',
+          urgencia: 'Baixa',
+          bairro: 'Vila Nova',
+          rua: 'Av. Modelo',
+          referencia: 'Ao lado da escola',
+          descricao: 'Ocorrência registrada para demonstração.',
+          arquivos: [],
+          status: 'encaminhada',
+          createdAt: new Date().toISOString()
+        }
+      ]);
+          renderAdminList();
+    })();
+  </script>
+</body>
+</html>
